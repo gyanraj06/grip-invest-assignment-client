@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Investment Platform Design System */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* Core Backgrounds */
+    --background: 250 250% 99%;
+    --foreground: 223 39% 7%;
+    
+    /* Financial Brand Colors */
+    --primary: 218 87% 51%;          /* Professional blue */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 218 100% 85%;    /* Lighter blue for glows */
+    
+    /* Success/Growth Colors */
+    --success: 145 85% 47%;          /* Green for gains */
+    --success-foreground: 0 0% 100%;
+    --success-light: 145 85% 95%;
+    
+    /* Warning/Loss Colors */
+    --destructive: 0 85% 58%;        /* Red for losses */
+    --destructive-foreground: 0 0% 100%;
+    --destructive-light: 0 85% 95%;
+    
+    /* Neutral System */
+    --card: 0 0% 100%;
+    --card-foreground: 223 39% 7%;
+    --card-border: 218 20% 92%;
+    
+    --secondary: 218 15% 97%;        /* Light gray backgrounds */
+    --secondary-foreground: 223 39% 7%;
+    
+    --muted: 218 15% 95%;
+    --muted-foreground: 223 20% 45%;
+    
+    --accent: 43 96% 56%;            /* Gold accent for premium features */
+    --accent-foreground: 223 39% 7%;
+    
+    /* Interactive Elements */
+    --border: 218 20% 90%;
+    --input: 218 20% 95%;
+    --ring: 218 87% 51%;
+    
+    /* Card styling */
+    --card-background: hsl(0 0% 100%);
+    --card-hover: hsl(218 15% 98%);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(218 20% 20% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(218 20% 20% / 0.1), 0 2px 4px -1px hsl(218 20% 20% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(218 20% 20% / 0.1), 0 4px 6px -2px hsl(218 20% 20% / 0.05);
+    --shadow-subtle: 0 1px 3px hsl(218 20% 20% / 0.12);
+    
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Roboto', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Financial UI Components */
+  .financial-card {
+    @apply bg-white rounded-lg border border-card-border shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .metric-positive {
+    @apply text-success;
+  }
+  
+  .metric-negative {
+    @apply text-destructive;
+  }
+  
+  .card-header {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  
+  /* Animation Classes */
+  .animate-slide-up {
+    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
