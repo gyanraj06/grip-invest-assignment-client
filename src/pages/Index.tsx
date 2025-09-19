@@ -62,7 +62,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-zinc-900">
       <div className="relative z-10">
         {/* Header */}
         <nav className="flex justify-between items-center p-6">
