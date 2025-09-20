@@ -7,6 +7,7 @@ import { UserInvestment } from '@/types';
 import { ChartLineUp, Clock, TrendUp, X } from 'phosphor-react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface InvestmentHistoryProps {
   investments: UserInvestment[];
@@ -18,6 +19,7 @@ export const InvestmentHistory: React.FC<InvestmentHistoryProps> = ({
   onCancelInvestment
 }) => {
   const { toast } = useToast();
+  const { user, updateUser } = useAuth();
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -54,6 +56,10 @@ export const InvestmentHistory: React.FC<InvestmentHistoryProps> = ({
 
       console.log('Cancelling investment:', investmentId);
 
+      // Find the investment to get the refund amount
+      const investment = investments.find(inv => inv.id === investmentId);
+      const refundAmount = investment ? Number(investment.amount_invested || investment.amount || 0) : 0;
+
       const response = await fetch(`${API_BASE_URL}/api/investments/${investmentId}/cancel`, {
         method: 'PATCH',
         headers: {
@@ -63,9 +69,17 @@ export const InvestmentHistory: React.FC<InvestmentHistoryProps> = ({
 
       if (response.ok) {
         console.log('Investment cancelled successfully');
+
+        // Update user balance with refund
+        if (user && refundAmount > 0) {
+          await updateUser({
+            balance: user.balance + refundAmount
+          });
+        }
+
         toast({
           title: "Investment Cancelled",
-          description: "Your investment has been cancelled successfully.",
+          description: `Your investment has been cancelled and ₹${refundAmount.toFixed(0)} has been refunded to your account.`,
         });
 
         // Call parent callback to refresh investments
