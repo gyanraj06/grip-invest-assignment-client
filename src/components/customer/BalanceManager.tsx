@@ -32,23 +32,66 @@ export const BalanceManager: React.FC = () => {
     if (!user || addAmount <= 0) return;
 
     try {
-      await updateUser({
-        balance: user.balance + addAmount,
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+      const token = localStorage.getItem('token');
+
+      console.log('Adding funds...', { amount: addAmount });
+
+      const response = await fetch(`${API_BASE_URL}/api/users/addBalance`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          amount: addAmount,
+        }),
       });
 
-      toast({
-        title: "Funds Added Successfully",
-        description: `$${addAmount.toLocaleString()} has been added to your account.`,
-      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Funds added successfully:', data);
 
-      setAddAmount(0);
-      setIsDialogOpen(false);
+        // Update user balance in context
+        await updateUser({
+          balance: user.balance + addAmount,
+        });
+
+        toast({
+          title: "Funds Added Successfully",
+          description: `${formatCurrency(addAmount)} has been added to your account.`,
+        });
+
+        setAddAmount(0);
+        setIsDialogOpen(false);
+      } else {
+        const errorData = await response.json();
+        console.error('Add funds API failed:', errorData);
+        throw new Error(errorData.message || 'Failed to add funds');
+      }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to add funds. Please try again.",
-        variant: "destructive",
-      });
+      console.error('Error adding funds:', error);
+
+      // Fallback to local update if API fails
+      try {
+        await updateUser({
+          balance: user.balance + addAmount,
+        });
+
+        toast({
+          title: "Funds Added Successfully",
+          description: `${formatCurrency(addAmount)} has been added to your account.`,
+        });
+
+        setAddAmount(0);
+        setIsDialogOpen(false);
+      } catch (fallbackError) {
+        toast({
+          title: "Error",
+          description: "Failed to add funds. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 

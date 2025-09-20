@@ -75,40 +75,6 @@ export const ProductMarketplace: React.FC<ProductMarketplaceProps> = ({
   const handleInvest = () => {
     if (!selectedProduct || !investmentAmount) return;
 
-    if (investmentAmount < selectedProduct.min_investment) {
-      toast({
-        title: "Investment Error",
-        description: `Minimum investment is ${formatCurrency(
-          selectedProduct.min_investment
-        )}`,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (
-      selectedProduct.max_investment &&
-      investmentAmount > selectedProduct.max_investment
-    ) {
-      toast({
-        title: "Investment Error",
-        description: `Maximum investment is ${formatCurrency(
-          selectedProduct.max_investment
-        )}`,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (user && investmentAmount > user.balance) {
-      toast({
-        title: "Insufficient Balance",
-        description: "Please add funds to your account before investing.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     onPurchase(selectedProduct.id, investmentAmount);
     setIsDialogOpen(false);
     setInvestmentAmount(0);
@@ -209,7 +175,7 @@ export const ProductMarketplace: React.FC<ProductMarketplaceProps> = ({
                 </div>
 
                 {product.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-muted-foreground">
                     {product.description}
                   </p>
                 )}

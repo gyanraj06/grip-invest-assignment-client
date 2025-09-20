@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { SignupForm } from "@/components/auth/SignupForm";
+import { UserRole } from "@/types";
 import {
   TrendingUp,
   DollarSign,
@@ -14,6 +16,7 @@ import {
 const Index = () => {
   const { isAuthenticated, user } = useAuth();
   const [currentStock, setCurrentStock] = useState(0);
+  const [isSignupMode, setIsSignupMode] = useState(false);
 
   const mockStocks = [
     {
@@ -56,8 +59,11 @@ const Index = () => {
   }, [isAuthenticated, user]);
 
   if (isAuthenticated && user) {
+    console.log("User authenticated:", user); // Debug log
+    const redirectPath = (user.role === UserRole.ADMIN || user.role === "admin") ? "/admin" : "/dashboard";
+    console.log("Redirecting to:", redirectPath);
     return (
-      <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} replace />
+      <Navigate to={redirectPath} replace />
     );
   }
 
@@ -176,10 +182,23 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Right Side - Login */}
+            {/* Right Side - Auth Forms */}
             <div className="flex flex-col items-center space-y-6">
               <div className="w-full max-w-md">
-                <LoginForm />
+                {isSignupMode ? <SignupForm /> : <LoginForm />}
+              </div>
+
+              {/* Toggle between Login and Signup */}
+              <div className="w-full max-w-md text-center">
+                <p className="text-gray-400 text-sm">
+                  {isSignupMode ? "Already have an account?" : "Don't have an account?"}
+                  <button
+                    onClick={() => setIsSignupMode(!isSignupMode)}
+                    className="text-blue-400 hover:text-blue-300 ml-2 font-medium transition-colors"
+                  >
+                    {isSignupMode ? "Sign In" : "Sign Up"}
+                  </button>
+                </p>
               </div>
 
               {/* Demo Credentials */}
